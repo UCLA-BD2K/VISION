@@ -1,0 +1,30 @@
+.bar {
+    fill: royalblue;
+}
+
+.bar:hover {
+    fill: cornflowerblue;
+}
+
+.axis {
+    font: 12px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #DDCCEE;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.v-result {
+    margin-top: 5%;
+}
+
+g text {
+    fill: #DDCCEE;
+}
