@@ -3,6 +3,7 @@ var mysql = require('mysql');
 var app = express();
 //var bodyParser = require('body-parser');
 var port = process.env.PORT || 5000;
+var config = require('./config');
 
 var nav = [{
     text: 'Home',
@@ -24,11 +25,7 @@ app.get('/search', function (req, res) {
     var param2 = req.query['param2'];
     var type;
 
-    var connection = mysql.createConnection({
-        host: '10.44.115.120',
-        user: 'developer',
-        password: 'uclabd2k2015'
-    });
+    var connection = mysql.createConnection(config);
     /* connection.connect(function (err) {
          if (err) {
              console.error('error connection: ' + err.stack);
@@ -86,4 +83,5 @@ connection.end();*/
 
 app.listen(port, function (err) {
     console.log('running server on port ' + port);
+    console.log(config);
 });
