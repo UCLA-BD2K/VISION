@@ -80,7 +80,7 @@
                         return d.TopRankedEntity;
                     }));
 
-                    // TODO: choose a suitable range for y-domain
+                    // TODO: choose a suitable min for y-domain
                     y.domain([.64, d3.max(data, function (d) {
                         return d.Score;
                     })]);

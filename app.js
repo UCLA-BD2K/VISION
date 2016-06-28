@@ -1,9 +1,7 @@
 var express = require('express');
 var mysql = require('mysql');
-var jsdom = require('jsdom');
-
 var app = express();
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 var port = process.env.PORT || 5000;
 
 var nav = [{
@@ -17,12 +15,7 @@ var nav = [{
     link: '#'
     }];
 
-// var resultRouter = require('./src/routes/resultRoutes');
-
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
@@ -43,7 +36,7 @@ app.get('/search', function (req, res) {
          }
          console.log('connected as id ' + connection.threadId);
      });*/
-    connection.query('SELECT * FROM HeartDB.DiseaseRelationExtraction WHERE QueryEntity LIKE \'' + param1 + '\' AND TopRankedEntity LIKE \'' + param2 + '\';', function (err, rows) {
+    connection.query('SELECT * FROM HeartDB.DiseaseRelationExtraction WHERE QueryEntity LIKE ? AND TopRankedEntity LIKE ?', [param1, param2], function (err, rows) {
         if (err) {
             console.error('error query: ' + err.stack);
             return;
@@ -52,7 +45,7 @@ app.get('/search', function (req, res) {
         param2 = rows[0].TopRankedEntity;
         type = rows[0].DrugOrGene;
 
-        connection.query('SELECT * FROM HeartDB.DiseaseRelationExtraction WHERE QueryEntity LIKE \'' + param1 + '\' AND DrugOrGene=\'' + type + '\';', function (err, rows) {
+        connection.query('SELECT * FROM HeartDB.DiseaseRelationExtraction WHERE QueryEntity LIKE ? AND DrugOrGene = ?', [param1, type], function (err, rows) {
             if (err) {
                 console.error('error query: ' + err.stack);
                 return;
@@ -77,7 +70,7 @@ app.get('/', function (req, res) {
     res.render('index', {
         title: 'Home',
         nav: nav
-    })
+    });
 });
 
 /*connection.query('SELECT * FROM HeartDB.DiseaseRelationExtraction', function (err, rows, fields) {
