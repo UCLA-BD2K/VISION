@@ -1,0 +1,13 @@
+# config
+config.js
+
+# dependencies
+node_modules
+public/lib
+public/css/bootstrap.min.css
+public/js/bootstrap.min.js
+
+# dev files
+gulpfile.js
+.bowerrc
+bower.json

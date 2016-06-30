@@ -4,7 +4,9 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-    <title><%=title%></title>
+    <title>
+        <%=title%>
+    </title>
     <meta name="generator" content="Bootply" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- bower:js -->
@@ -31,7 +33,11 @@
         <div class="container">
             <ul class="nav navbar-nav">
                 <% for(var k=0; k<nav.length; k++){ %>
-                    <li><a href="<%=nav[k].link%>"><%=nav[k].text%></a></li>
+                    <li>
+                        <a href="<%=nav[k].link%>">
+                            <%=nav[k].text%>
+                        </a>
+                    </li>
                     <% } %>
             </ul>
         </div>
@@ -53,7 +59,7 @@
                     var margin = {
                             top: 20,
                             right: 20,
-                            bottom: 30,
+                            bottom: 80,
                             left: 40
                         },
                         width = 660 - margin.left - margin.right,
@@ -77,17 +83,29 @@
                     var data = <%-JSON.stringify(rows)%>;
 
                     x.domain(data.map(function (d) {
-                        return d.TopRankedEntity;
+                        return d.TopMatch;
                     }));
 
                     // TODO: choose a suitable min for y-domain
-                    y.domain([.64, d3.max(data, function (d) {
+                    // currently set as min - .3 * range
+                    var max = d3.max(data, function (d) {
                         return d.Score;
-                    })]);
+                    });
+                    var min = d3.min(data, function (d) {
+                        return d.Score;
+                    });
+                    var range = max - min;
+                    y.domain([min - (range * .3), max]);
                     svg.append("g")
                         .attr("class", "x axis")
                         .attr("transform", "translate(0," + height + ")")
-                        .call(xAxis);
+                        .call(xAxis)
+                    // TODO: make x labels that fit/look nice
+                    // eg. use d3-tip to add tooltips with more info: full name, // references, etc.
+                    // currently labels get cut off if names are too long
+                        .selectAll("text")
+                        .attr("transform", "rotate(-25)")
+                        .style("text-anchor", "end");
                     svg.append("g")
                         .attr("class", "y axis")
                         .call(yAxis)
@@ -102,10 +120,11 @@
                         .enter().append("rect")
                         .attr("class", "bar")
                         .attr("x", function (d) {
-                            return x(d.TopRankedEntity);
+                            return x(d.TopMatch);
                         })
                         .attr("id", function (d) {
-                            return d.TopRankedEntity;
+                            return 'p' + d.ID;
+                            // p for pair since id names can't start with numbers
                         })
                         .attr("width", x.rangeBand())
                         .attr("y", function (d) {
@@ -114,7 +133,7 @@
                         .attr("height", function (d) {
                             return height - y(d.Score);
                         });
-                    svg.select("#<%-param2%>")
+                    svg.select("#p<%-id%>")
                         .style("fill", "deepskyblue");
 
                     function type(d) {
