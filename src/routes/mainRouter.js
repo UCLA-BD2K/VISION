@@ -18,6 +18,6 @@ var router = function (nav) {
     mainRouter.get('/about', mainController.about);
     
     return mainRouter;
-}
+};
 
 module.exports = router;

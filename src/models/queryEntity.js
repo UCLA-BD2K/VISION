@@ -34,25 +34,37 @@ QueryEntity.prototype._getResults = function (self, display) {
          }
          console.log('connected as id ' + connection.threadId);
      });*/
-    
-    // TODO: error handling/no results found
+
     connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND TopMatch LIKE ?', [self.param1, self.param2], function (err, rows) {
         if (err) {
-            console.error('error query: ' + err.stack);
+            console.log('error query: ' + err.stack);
             return;
-        }
-        self.param1 = rows[0].Term;
-        self.param2 = rows[0].TopMatch;
-        self.type = rows[0].MatchType;
-        self.ID = rows[0].ID;
-        connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND MatchType = ?', [self.param1, self.type], function (err, rows) {
-            if (err) {
-                console.error('error query: ' + err.stack);
-                return;
+        } else {
+            try {
+                self.param1 = rows[0].Term;
+                self.param2 = rows[0].TopMatch;
+                self.type = rows[0].MatchType;
+                self.ID = rows[0].ID;
+            } catch (err) {
+                connection.end();
+                return display(null);
             }
-            return display(rows);
-        });
+            connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND MatchType = ?', [self.param1, self.type], function (err, rows) {
+                if (err) {
+                    console.log('error query: ' + err.stack);
+                    return;
+                } else {
+                    connection.end();
+                    return display(rows);
+                }
+            });
+        }
     });
+
+    /*process.on('uncaughtException', function () {
+        console.log('error query');
+        return display(null);
+    });*/
 };
 
 module.exports = QueryEntity;

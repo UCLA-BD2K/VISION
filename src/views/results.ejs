@@ -50,8 +50,12 @@
 
                 <h1>Search Results</h1>
                 <p class="lead">
-                    <%=param1%> and
-                        <%=param2%>
+                    <% if (rows == null) { %>
+                        No results found.
+                        <% } else { %>
+                            <%=param1%> and
+                                <%=param2%>
+                                    <% } %>
                 </p>
                 <div class="container graph"></div>
                 <script>
@@ -100,15 +104,19 @@
                         .attr("class", "x axis")
                         .attr("transform", "translate(0," + height + ")")
                         .call(xAxis)
-                    // TODO: make x labels that fit/look nice
-                    // eg. use d3-tip to add tooltips with more info: full name, // references, etc.
-                    // currently labels get cut off if names are too long
+                        // TODO: make x labels that fit/look nice
+                        // eg. use d3-tip to add tooltips with more info: full name, // references, etc.
+                        // currently labels get cut off if names are too long
                         .selectAll("text")
                         .attr("transform", "rotate(-25)")
                         .style("text-anchor", "end");
                     svg.append("g")
                         .attr("class", "y axis")
-                        .call(yAxis)
+                        // translates y-axis 10px to the left so that it doesn't
+                        // overlap with first bar.
+                        // TODO: come up with a better graph design
+                        //.attr("transform", "translate(-10, 0)")
+                    .call(yAxis)
                         .append("text")
                         .attr("transform", "rotate(-90)")
                         .attr("y", 6)

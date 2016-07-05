@@ -1,6 +1,8 @@
 var gulp = require('gulp');
 var nodemon = require('gulp-nodemon');
-var jsFiles = ['*.js', 'src/**/*.js'];
+var jsFiles = ['*.js', 'src/**/*.js', 'test/*.js'];
+var mocha = require('gulp-mocha');
+var gutil = require('gulp-util');
 
 gulp.task('inject', function () {
     var wiredep = require('wiredep').stream;
@@ -25,14 +27,24 @@ gulp.task('inject', function () {
         .pipe(gulp.dest('./src/views'));
 });
 
-gulp.task('start', ['inject'], function () {
+gulp.task('mocha', function () {
+    return gulp.src(['test/*.js'], {
+            read: false
+        })
+        .pipe(mocha());
+        //.on('error', gutil.log);
+});
+
+gulp.task('default', ['inject', 'mocha'], function () {
     var options = {
         script: 'app.js',
+        tasks: ['mocha'],
         delayTime: 1,
         env: {
             'PORT': 5000
         },
-        watch: jsFiles
+        watch: jsFiles,
+        legacyWatch: true
     };
 
     return nodemon(options)
@@ -40,3 +52,7 @@ gulp.task('start', ['inject'], function () {
             console.log('Restarting...');
         });
 });
+
+gulp.task('jenkins', ['inject'], function() {
+    exec('./app.js');
+})
