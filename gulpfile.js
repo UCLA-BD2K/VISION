@@ -54,5 +54,18 @@ gulp.task('default', ['inject', 'mocha'], function () {
 });
 
 gulp.task('jenkins', ['inject'], function() {
-    exec('./app.js');
+    var options = {
+        script: 'app.js',
+        delayTime: 1,
+        env: {
+            'PORT': 5000
+        },
+        watch: jsFiles,
+        legacyWatch: true
+    };
+
+    return nodemon(options)
+        .on('restart', function (ev) {
+            console.log('Restarting...');
+        });
 })

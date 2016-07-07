@@ -12,7 +12,7 @@ var queryController = function (nav) {
         qe = new QueryEntity(param1, param2);
         //console.log(qe.getJSON());
 
-        var display = function (data) {
+        var display = function (data, text) {
             res.render('results', {
                 title: 'Search Results',
                 nav: nav,
@@ -20,6 +20,7 @@ var queryController = function (nav) {
                 param2: qe.param2,
                 id: qe.ID,
                 rows: data,
+                wiki: text
             });
         };
         qe.getJSON(display);

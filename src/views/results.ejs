@@ -12,6 +12,7 @@
     <!-- bower:js -->
     <script src="/lib/jquery/dist/jquery.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/lib/typeahead.js/dist/typeahead.bundle.js"></script>
     <!-- endbower -->
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <!-- inject:css -->
@@ -116,7 +117,7 @@
                         // overlap with first bar.
                         // TODO: come up with a better graph design
                         //.attr("transform", "translate(-10, 0)")
-                    .call(yAxis)
+                        .call(yAxis)
                         .append("text")
                         .attr("transform", "rotate(-90)")
                         .attr("y", 6)
@@ -148,14 +149,44 @@
                         d.Score = +d.Score;
                         return d;
                     }
+
+                    $(".bar").click(function () {
+                        var id = this.id.substring(1);
+                        var pair = data.filter(function(n) {
+                            return n.ID == id;
+                        });
+
+                        $.ajax({
+                            //doesn't work for all entries
+                            url: "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=" + pair[0].TopMatch + "&redirects",
+                            data: {
+                                format: "json"
+                            },
+                            type: "get",
+                            error: function (){
+                                console.log("wiki error");
+                            },
+                            dataType: "jsonp",
+                            success: function (data) {
+                                data = data.query.pages;
+                                var page = Object.keys(data)[0];
+                                data = data[page].extract;
+                                $("#wiki").html(data);
+                            }
+                        })
+                    });
+
+                    
                 </script>
             </div>
             <!-- /row -->
 
             <div class="row">
 
-                <div class="col-lg-12 text-center v-center" style="font-size:39pt;">
-                    <a href="#"><i class="icon-google-plus"></i></a> <a href="#"><i class="icon-facebook"></i></a> <a href="#"><i class="icon-twitter"></i></a> <a href="#"><i class="icon-github"></i></a> <a href="#"><i class="icon-pinterest"></i></a>
+                <div class="col-md-6 center-block text-center" style="font-size:13pt;">
+                    <p id="wiki">
+                        <%=wiki%>
+                    </p>
                 </div>
 
             </div>

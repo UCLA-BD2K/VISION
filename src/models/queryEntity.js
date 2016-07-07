@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var config = require('../config/config');
+var request = require('request');
 
 /**
  * A query based on the user's search parameters.
@@ -55,7 +56,7 @@ QueryEntity.prototype._getResults = function (self, display) {
                     return;
                 } else {
                     connection.end();
-                    return display(rows);
+                    return self._getWiki(self, rows, display);
                 }
             });
         }
@@ -65,6 +66,21 @@ QueryEntity.prototype._getResults = function (self, display) {
         console.log('error query');
         return display(null);
     });*/
+};
+
+QueryEntity.prototype._getWiki = function (self, rows, display) {
+    var url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exintro&explaintext&titles=' + self.param2 + '&redirects';
+    request(url, function (error, response, body) {
+        if (error) {
+            console.log('error wiki');
+            return;
+        } else {
+            body = JSON.parse(body).query.pages;
+            var page = Object.keys(body)[0];
+            body = body[page].extract;
+            return display(rows, body);
+        }
+    });
 };
 
 module.exports = QueryEntity;
