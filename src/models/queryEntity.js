@@ -38,7 +38,7 @@ QueryEntity.prototype._getResults = function (self, display) {
 
     connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND TopMatch LIKE ?', [self.param1, self.param2], function (err, rows) {
         if (err) {
-            console.log('error query: ' + err.stack);
+            console.log('queryEntity error query: ' + err.stack);
             return;
         } else {
             try {
@@ -48,7 +48,7 @@ QueryEntity.prototype._getResults = function (self, display) {
                 self.ID = rows[0].ID;
             } catch (err) {
                 connection.end();
-                return display(null);
+                return display(null, null);
             }
             connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND MatchType = ?', [self.param1, self.type], function (err, rows) {
                 if (err) {
@@ -77,8 +77,13 @@ QueryEntity.prototype._getWiki = function (self, rows, display) {
         } else {
             body = JSON.parse(body).query.pages;
             var page = Object.keys(body)[0];
+            var title = body[page].title;
             body = body[page].extract;
-            return display(rows, body);
+            var wiki = {
+                title: title,
+                text: body
+            };
+            return display(rows, wiki);
         }
     });
 };

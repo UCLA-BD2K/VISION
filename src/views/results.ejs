@@ -170,8 +170,10 @@
                             success: function (data) {
                                 data = data.query.pages;
                                 var page = Object.keys(data)[0];
+                                var title = data[page].title;
                                 data = data[page].extract;
-                                $("#wiki").html(data);
+                                var wiki = data + "<a href=\"http://en.wikipedia.org/wiki/" + title + "\"> (More)</a>";
+                                $("#wiki").html(wiki);
                             }
                         })
                     });
@@ -184,9 +186,12 @@
             <div class="row">
 
                 <div class="col-md-6 center-block text-center" style="font-size:13pt;">
+                    <% if( wiki != null) { %>
                     <p id="wiki">
-                        <%=wiki%>
+                        <%=wiki.text%>
+                        <a href="http://en.wikipedia.org/wiki/<%=wiki.title%>">(More)</a>
                     </p>
+                    <% } %>
                 </div>
 
             </div>

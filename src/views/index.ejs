@@ -73,10 +73,13 @@
             </div>
 
             <script>
+                $("#term").change(function () {
+                    var current = $("#term").val();
+                });
                 var term = new Bloodhound({
                     datumTokenizer: Bloodhound.tokenizers.whitespace,
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    local: ["Cerebrovascular", 
+                    /* local: ["Cerebrovascular", 
                             "Ischemic Heart Disease",
                             "Cardiomyopathy", 
                             "Arrythmia", 
@@ -85,11 +88,17 @@
                             "Coronary Heart Disease", 
                             "Dilated Cardiomyopathy", 
                             "Valvular Heart Disease"]
+                            */
+                            
+                   remote: {
+                        url: '/api/term/%query',
+                        wildcard: '%query'
+                   }
                 });
                 var match = new Bloodhound({
                     datumTokenizer: Bloodhound.tokenizers.whitespace,
                     queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    local: ["Alpha-galactosidase A",
+                    /* local: ["Alpha-galactosidase A",
                     "Brain-derived Neurotrophic factor",
                     "Tissue-type Plasminogen Activator",
                     "Methylenetetrahydrofolate Reductase",
@@ -153,16 +162,21 @@
                     "casq2",
                     "gpd1l",
                     "kcne4"]
-                });
+                    */
+                    remote: {
+                        url: 'api/match/%query',
+                        wildcard: '%query'
+                    }
+                }); 
                 
-                // TODO: load search terms from database instead of hard coding them
                 $("#term").typeahead({
                     hint: true,
                     highlight: true,
                     minLength: 1
                 }, {
                     name: 'terms',
-                    source: term
+                    source: term,
+                    limit: 10
                 });
 
                 $("#match").typeahead({
@@ -171,7 +185,8 @@
                     minLength: 1
                 }, {
                     name: 'matches',
-                    source: match
+                    source: match,
+                    limit: 15,
                 });
             </script>
 
