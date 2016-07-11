@@ -75,6 +75,7 @@
             <script>
                 $("#term").change(function () {
                     var current = $("#term").val();
+                    console.log(current);
                 });
                 var term = new Bloodhound({
                     datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -164,8 +165,17 @@
                     "kcne4"]
                     */
                     remote: {
-                        url: 'api/match/%query',
-                        wildcard: '%query'
+                        url: 'api/match',
+                        prepare: function (query, settings) {
+                            settings.url += '/' + encodeURIComponent($('#match').val());
+                            
+                            if($('#term.tt-input').val()) {
+                                settings.url += '/' + encodeURIComponent($('#term.tt-input').val());
+                                
+                                console.log(settings.url);
+                            }
+                            return settings;
+                        }
                     }
                 }); 
                 

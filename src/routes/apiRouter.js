@@ -53,6 +53,31 @@ var router = function () {
             }
         });
     })
+    
+    apiRouter.get('/match/:cmatch/:cterm', function(req, res) {
+        //console.log(req.params);
+        var match = req.params.cmatch;
+        var term = req.params.cterm;
+        // var term = 'a';
+        //console.log(match);
+        var connection = mysql.createConnection(config);
+        connection.query('SELECT DISTINCT TopMatch FROM HeartDB.Pairs WHERE (TopMatch LIKE ? OR TopMatch LIKE ?) AND (Term LIKE ? OR Term LIKE ?)', [match + '%', '% ' + match + '%', term + '%', '% ' + term + '%'], function (err, rows) {
+            if (err) {
+                console.log('apiController error query: ' + err.stack);
+                connection.end();
+                return;
+            } else {
+                var arr = [];
+                for (var k = 0; k < rows.length; k++) {
+                    arr.push(rows[k].TopMatch);
+                }
+                console.log(arr);
+                res.json(arr);
+                connection.end();
+            }
+        });
+    })
+    
     return apiRouter;
 
 };
