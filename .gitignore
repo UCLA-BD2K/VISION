@@ -9,5 +9,3 @@ public/js/bootstrap.min.js
 
 # dev files
 gulpfile.js
-.bowerrc
-bower.json

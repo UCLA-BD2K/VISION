@@ -1,0 +1,23 @@
+{
+  "name": "vision",
+  "description": "",
+  "main": "app.js",
+  "authors": [
+    "Allison <x3ally.k@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "typeahead.js": "^0.11.1",
+    "jquery": "^3.0.0"
+  }
+}
