@@ -9,19 +9,21 @@
     </title>
     <meta name="generator" content="Bootply" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <!-- bower:js -->
     <script src="/lib/jquery/dist/jquery.js"></script>
-    <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/lib/jquery-2.2.4/dist/jquery.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/lib/typeahead.js/dist/typeahead.bundle.js"></script>
     <!-- endbower -->
-    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- endbower -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/chart.css">
     <link rel="stylesheet" href="/css/styles.css">
     <!-- endinject -->
     <!-- inject:js -->
-    <script src="/js/bootstrap.min.js"></script>
     <!-- endinject -->
     <!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -185,7 +187,7 @@
 
             <div class="row">
 
-                <div class="col-md-6 center-block text-center" style="font-size:13pt;">
+                <div class="center-block text-center" style="font-size:13pt;">
                     <% if( wiki != null) { %>
                     <p id="wiki">
                         <%=wiki.text%>
