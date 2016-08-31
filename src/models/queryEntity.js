@@ -35,32 +35,45 @@ QueryEntity.prototype._getResults = function (self, display) {
          }
          console.log('connected as id ' + connection.threadId);
      });*/
-
-    connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND TopMatch LIKE ?', [self.param1, self.param2], function (err, rows) {
-        if (err) {
-            console.log('queryEntity error query: ' + err.stack);
-            return;
-        } else {
-            try {
+    if (self.param2 == "") {
+        connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ?', [self.param1], function (err, rows) {
+            if (err) {
+                console.log('queryEntity error query: ' + err.stack);
+                return;
+            } else {
                 self.param1 = rows[0].Term;
-                self.param2 = rows[0].TopMatch;
-                self.type = rows[0].MatchType;
-                self.ID = rows[0].ID;
-            } catch (err) {
+                self.param2 = self.param1                
                 connection.end();
-                return display(null, null);
+                return self._getWiki(self, rows, display);
             }
-            connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND MatchType = ?', [self.param1, self.type], function (err, rows) {
-                if (err) {
-                    console.log('error query: ' + err.stack);
-                    return;
-                } else {
+        });
+    } else {
+        connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND TopMatch LIKE ?', [self.param1, self.param2], function (err, rows) {
+            if (err) {
+                console.log('queryEntity error query: ' + err.stack);
+                return;
+            } else {
+                try {
+                    self.param1 = rows[0].Term;
+                    self.param2 = rows[0].TopMatch;
+                    self.type = rows[0].MatchType;
+                    self.ID = rows[0].ID;
+                } catch (err) {
                     connection.end();
-                    return self._getWiki(self, rows, display);
+                    return display(null, null);
                 }
-            });
-        }
-    });
+                connection.query('SELECT * FROM HeartDB.Pairs WHERE Term LIKE ? AND MatchType = ?', [self.param1, self.type], function (err, rows) {
+                    if (err) {
+                        console.log('error query: ' + err.stack);
+                        return;
+                    } else {
+                        connection.end();
+                        return self._getWiki(self, rows, display);
+                    }
+                });
+            }
+        });
+    }
 
     /*process.on('uncaughtException', function () {
         console.log('error query');

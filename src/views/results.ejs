@@ -55,10 +55,11 @@
                 <p class="lead">
                     <% if (rows == null) { %>
                         No results found.
-                        <% } else { %>
-                            <%=param1%> and
-                                <%=param2%>
-                                    <% } %>
+                    <% } else if (param1 != param2) { %>
+                        <%=param1%> and <%=param2%>
+                    <% } else { %>
+                        <%=param1%>
+                    <% } %>
                 </p>
                 <div class="container graph"></div>
                 <script>
@@ -154,7 +155,7 @@
 
                     $(".bar").click(function () {
                         var id = this.id.substring(1);
-                        var pair = data.filter(function(n) {
+                        var pair = data.filter(function (n) {
                             return n.ID == id;
                         });
 
@@ -165,7 +166,7 @@
                                 format: "json"
                             },
                             type: "get",
-                            error: function (){
+                            error: function () {
                                 console.log("wiki error");
                             },
                             dataType: "jsonp",
@@ -179,8 +180,6 @@
                             }
                         })
                     });
-
-                    
                 </script>
             </div>
             <!-- /row -->
@@ -190,8 +189,8 @@
                 <div class="center-block text-center" style="font-size:13pt;">
                     <% if( wiki != null) { %>
                     <p id="wiki">
-                        <%=wiki.text%>
-                        <a href="http://en.wikipedia.org/wiki/<%=wiki.title%>">(More)</a>
+                    <%=wiki.text%>
+                    <a href="http://en.wikipedia.org/wiki/<%=wiki.title%>">(More)</a>
                     </p>
                     <% } %>
                 </div>
@@ -207,49 +206,6 @@
         </div>
     </div>
     <!-- /container full -->
-
-    <div class="container">
-
-        <hr>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>Hello.</h3></div>
-                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. Aliquam in felis sit amet augue.
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>Hello.</h3></div>
-                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. Aliquam in felis sit amet augue.
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>Hello.</h3></div>
-                    <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis pharetra varius quam sit amet vulputate. Quisque mauris augue, molestie tincidunt condimentum vitae, gravida a libero. Aenean sit amet felis dolor, in sagittis nisi. Sed ac orci quis tortor imperdiet venenatis. Duis elementum auctor accumsan. Aliquam in felis sit amet augue.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <br>
-                <br>
-                <p class="pull-right"><a href="http://www.bootply.com">Template from Bootply</a> &nbsp; ©Copyright 2013 ACME<sup>TM</sup> Brand.</p>
-                <br>
-                <br>
-            </div>
-        </div>
-    </div>
-
 
     <!-- script references -->
 </body>
